@@ -7,10 +7,10 @@ package weather;
  * Millimeters.
  */
 public class WeatherReading {
-  private double airTemp;
-  private double dewPointTemp;
-  private double windSpeed;
-  private double totalRain;
+  private int airTemp;
+  private int dewPointTemp;
+  private int windSpeed;
+  private int totalRain;
 
   /**
    * Construct a Book object that has the provided title, author and price.
@@ -22,7 +22,7 @@ public class WeatherReading {
    * @param totalRain    the total rain to be given to this weather reading
    */
 
-  public WeatherReading(double airTemp, double dewPointTemp, double windSpeed, double totalRain)
+  public WeatherReading(int airTemp, int dewPointTemp, int windSpeed, int totalRain)
             throws IllegalArgumentException {
     if ((airTemp < dewPointTemp) || (windSpeed < 0) || (totalRain < 0)) {
       throw new IllegalArgumentException("Negative wind speed or total rain are not supported. \n "
@@ -41,7 +41,7 @@ public class WeatherReading {
    * @return the temperature of this weather reading
    */
 
-  public double getTemperature() {
+  public int getTemperature() {
     return this.airTemp;
 
   }
@@ -52,7 +52,7 @@ public class WeatherReading {
    * @return the dew point temperature of this weather reading
    */
 
-  public double getDewPoint() {
+  public int getDewPoint() {
     return this.dewPointTemp;
 
   }
@@ -63,7 +63,7 @@ public class WeatherReading {
    * @return the wind speed of this weather reading
    */
 
-  public double getWindSpeed() {
+  public int getWindSpeed() {
     return this.windSpeed;
 
   }
@@ -74,7 +74,7 @@ public class WeatherReading {
   * @return the total rain received in the last 24 hours of this weather reading
   */
   
-  public double getTotalRain() {
+  public int getTotalRain() {
     return this.totalRain;
 
   }
@@ -86,17 +86,9 @@ public class WeatherReading {
    * @return relative humidity of this weather reading
    */
   
-  public double getRelativeHumidity() {
-    double humidity = -5 * this.dewPointTemp + 5 * this.airTemp - 100;
-
-    if (humidity < 0) {
-      humidity = 0;
-    }
-
-    if (humidity > 100) {
-      humidity = 100;
-    }
-
+  public int getRelativeHumidity() {
+    int humidity = -5 * this.dewPointTemp + 5 * this.airTemp - 100;    
+    humidity = Math.abs(humidity);
     return humidity;
   }
 
@@ -107,9 +99,9 @@ public class WeatherReading {
    * @return heat index of this weather reading
    */
   
-  public double getHeatIndex() {
-    double humidity = this.getRelativeHumidity();
-    double temp = this.getTemperature();
+  public int getHeatIndex() {
+    int humidity = this.getRelativeHumidity();
+    int temp = this.getTemperature();
     double c1 = -8.78469475556;
     double c2 = 1.61139411 * temp;
     double c3 = 2.33854883889 * humidity;
@@ -120,8 +112,8 @@ public class WeatherReading {
     double c8 = 0.00072546 * temp * Math.pow(humidity, 2);
     double c9 = -0.000003582 * Math.pow(temp, 2) * Math.pow(humidity, 2);
     
-    double heatIndex = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9;
-
+    int heatIndex = (int) (c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9);
+    
     return heatIndex;
 
   }
@@ -132,9 +124,9 @@ public class WeatherReading {
   * 
   * @return the Fahrenheit value for the weather reading.
   */
-  public double getFahrenheitFromCelsius() {
-    double celsius = this.airTemp;
-    double fahrenheit = (celsius * 9 / 5) + 32;
+  public int getFahrenheitFromCelsius() {
+    int celsius = this.airTemp;
+    int fahrenheit = (celsius * 9 / 5) + 32;
     return fahrenheit;
   }
 
@@ -145,8 +137,8 @@ public class WeatherReading {
    * 
    * @return the converted Fahrenheit temperature
    */
-  public double getCelsiusFromFahrenheit(double fahrenheit) {
-    double celsius = (fahrenheit - 32) * 5 / 9;
+  public int getCelsiusFromFahrenheit(int fahrenheit) {
+    int celsius = (fahrenheit - 32) * 5 / 9;
     return celsius;
   }
 
@@ -156,13 +148,13 @@ public class WeatherReading {
    *
    * @return
    */
-  public double getWindChill() {
-    double fahrenheit = this.getFahrenheitFromCelsius();
-    double windchillF = 35.74 + .6215 * fahrenheit - 35.75 * Math.pow(this.windSpeed, .16)
-                + .4275 * fahrenheit * Math.pow(this.windSpeed, .16);
-    double windchillC = this.getCelsiusFromFahrenheit(windchillF);
+  public int getWindChill() {
+    int fahrenheit = this.getFahrenheitFromCelsius();
+    int windchillF = (int) (35.74 + (.6215 * fahrenheit) - (35.75 * Math.pow(this.windSpeed, .16))
+                + (.4275 * fahrenheit * Math.pow(this.windSpeed, .16)));
+    //int windchillC = this.getCelsiusFromFahrenheit(windchillF);
 
-    return windchillC;
+    return windchillF;
 
   }
   
@@ -174,12 +166,12 @@ public class WeatherReading {
 
   public String toString() {
     String reading;
-    double air = this.airTemp;
-    double dew = this.dewPointTemp;
-    double wind = this.windSpeed;
-    double rain = this.totalRain;
+    int air = this.airTemp;
+    int dew = this.dewPointTemp;
+    int wind = this.windSpeed;
+    int rain = this.totalRain;
     
-    reading = String.format("Reading: T = %f, D = %f, V = %f, rain = %f", air, dew, wind, rain);
+    reading = String.format("Reading: T = %d, D = %d, v = %d, rain = %d", air, dew, wind, rain);
     return reading;
   }
 }
